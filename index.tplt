@@ -2,16 +2,16 @@
 <html>
   <title>The News Reader</title>
   <head>
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/pure-min.css" type="text/css">
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/ok.min.css" type="text/css">
   </head>
   <body>
-    <p> <span style="float:right;" id="updated">{{ updated }}</span></p>
+    <p> <span style="float:right;color:grey;font-size:50%;" id="updated">{{ updated }}</span></p>
     <ul id="rss_list">
-      <li><a href="https://text.npr.org/">NPR</a></li>
       {% for item in rss_list %}
-      <li><a href="{{ item.name }}/index.html">{{ item.name }}</a></li>
+      <li><a href="{{ item.name_escaped }}/index.html">{{ item.name }}</a></li>
       {% endfor %}
+      <li><a href="https://text.npr.org/">NPR</a></li>
     </ul>
   </body>
 </html>

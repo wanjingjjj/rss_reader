@@ -1,8 +1,40 @@
 general:
-        target_dir: /usr/share/nginx/html/rss
-	limit: 10
+    target_dir: /usr/share/nginx/html/rss
+    limit: 20
 rss:
-        - name: Scientific American
-          url: http://rss.sciam.com/ScientificAmerican-Global
-        - name: HowStuffWorks
-          url: https://syndication.howstuffworks.com/rss/HSW?type%5b%5d=article&type%5b%5d=list
+    - name: Hacker News
+      url: https://news.ycombinator.com/rss
+      full_content: false
+    - name: Scientific American
+      url: http://rss.sciam.com/ScientificAmerican-Global
+      full_content: false
+    - name: HowStuffWorks
+      url: https://syndication.howstuffworks.com/rss/HSW?type%5b%5d=article&type%5b%5d=list
+      full_content: false
+    - name: Wired
+      url: https://www.wired.com/feed/rss
+      full_content: false
+    - name: Solidot
+      url: http://feeds.feedburner.com/solidot
+      full_content: false
+    - name: Anandtech
+      url: http://www.anandtech.com/rss/
+      full_content: true
+    - name: 阮一峰
+      url: https://www.ruanyifeng.com/blog/atom.xml
+      full_content: true
+    - name: Rachel By The Bay
+      url: https://rachelbythebay.com/w/atom.xml
+      full_content: true
+    - name: Dan Luu
+      url: https://danluu.com/atom.xml
+      full_content: true
+    - name: Techmeme
+      url: https://www.techmeme.com/feed.xml
+      full_content: true
+    - name: 知乎日报
+      url: http://feeds.feedburner.com/zhihu-daily
+      full_content: true
+    - name: 知乎精选
+      url: https://www.zhihu.com/rss
+      full_content: true
