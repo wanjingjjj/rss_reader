@@ -9,6 +9,7 @@ import jinja2
 from datetime import datetime
 from lxml.html import fromstring, tostring
 from lxml.html import builder as E
+import pytz
 
 from config import YamlReader
 
@@ -47,7 +48,7 @@ def process(rss):
 
 def render_index(rss_list):
     template = templateEnv.get_template("index.tplt")
-    body = template.render(rss_list = rss_list, updated=datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+    body = template.render(rss_list = rss_list, updated=datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S'))
     write_body_to_file(body,
                        '{base_dir}/index.html'.format(base_dir=YamlReader('general.target_dir')),
                        'w')
