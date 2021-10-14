@@ -1,0 +1,15 @@
+<!DOCTYPE html>
+<html id=rss_name>
+  <title>{{ rss_name }}</title>
+  <head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/pure-min.css" type="text/css">
+  </head>
+  <body>
+    <ul id="article_list">
+      {% for item in article_list %}
+      <li style="text-align:left;"><a href="{{ item.title }}.html">{{ item.title }}</a> <span style="float:right;">{{ item.published }}</span></li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

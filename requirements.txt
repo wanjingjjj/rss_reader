@@ -1,0 +1,14 @@
+certifi==2021.10.8
+chardet==4.0.0
+charset-normalizer==2.0.7
+cssselect==1.1.0
+feedparser==6.0.8
+idna==3.3
+Jinja2==3.0.2
+lxml==4.6.3
+MarkupSafe==2.0.1
+PyYAML==5.4.1
+readability-lxml==0.8.1
+requests==2.26.0
+sgmllib3k==1.0.0
+urllib3==1.26.7

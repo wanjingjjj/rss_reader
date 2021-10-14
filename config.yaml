@@ -1,0 +1,8 @@
+general:
+        target_dir: /usr/share/nginx/html/rss
+	limit: 10
+rss:
+        - name: Scientific American
+          url: http://rss.sciam.com/ScientificAmerican-Global
+        - name: HowStuffWorks
+          url: https://syndication.howstuffworks.com/rss/HSW?type%5b%5d=article&type%5b%5d=list
