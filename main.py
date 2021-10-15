@@ -25,7 +25,11 @@ def process(rss):
     logging.info("start processing {} by url: {}".format(rss["name"], rss["url"]))
     limit = YamlReader('general.limit')
     article_list = get_article_list_by_rss(rss["url"])[:limit]
+    latest=datetime.strptime('1970-01-01', '%Y-%m-%d')
     for article in article_list:
+        # get the latest article
+        if article["published_parsed"] > latest:
+            latest = article["published_parsed"]
         clean_page = ""
         if rss["full_content"]:
             clean_page = inject_style(article["content"], article["title"])
@@ -42,6 +46,9 @@ def process(rss):
             article_title = article['filename']
         )
         write_body_to_file(clean_page, file_name, 'wb')
+    #put the age of latest article in dict for index rendering
+    age = (datetime.now() - latest).days
+    rss["age"] = 0 if age < 0 else age
     render_rss(rss, article_list)
     logging.info("{} done".format(rss["name"]))
     return
@@ -74,8 +81,8 @@ def get_article_list_by_rss(url):
                    'filename': i['title'][:64],
                    'filename_escaped': urllib.parse.quote(i['title'][:64]),
                    'content': i['content'][0]['value'] if 'content' in i else i['description'],
-                   'published': i['published'] if 'published' in i else i['updated'],
-                   'published_parsed': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
+                   'published': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
+                   'published_parsed': published_parsed,
                    'link': i['link']}
         article_list.append(article)
     return article_list

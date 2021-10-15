@@ -9,7 +9,7 @@
     <p> <span style="float:right;color:grey;font-size:50%;" id="updated">{{ updated }}</span></p>
     <ul style="list-style-type:none;" id="rss_list">
       {% for item in rss_list %}
-      <li><a href="{{ item.name_escaped }}/index.html">{{ item.name }}</a></li>
+      <li><a href="{{ item.name_escaped }}/index.html">{{ item.name }}</a> <span style="float:right;color:grey;font-size:50%;">{{ item.age }} days old</span></li>
       {% endfor %}
       <li><a href="https://text.npr.org/">NPR</a></li>
     </ul>
