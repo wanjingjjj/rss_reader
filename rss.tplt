@@ -8,7 +8,7 @@
   <body>
     <ul id="article_list">
       {% for item in article_list %}
-      <li style="text-align:left;"><a href="{{ item.filename_escaped }}.html">{{ item.title }}</a> <span style="float:right;color:grey;font-size:50%;">{{ item.published }}</span></li>
+      <li style="text-align:left;"><a href="{{ item.filename_escaped }}.html">{{ item.title }} ({{ item.size }})</a> <span style="float:right;color:grey;font-size:50%;">{{ item.published }}</span></li>
       {% endfor %}
     </ul>
   </body>

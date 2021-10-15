@@ -45,6 +45,8 @@ def process(rss):
             rss_name = rss["name"],
             article_title = article['filename']
         )
+        # get the size of page
+        article["size"] = "{:.2f}k".format(len(clean_page) / 1024)
         write_body_to_file(clean_page, file_name, 'wb')
     #put the age of latest article in dict for index rendering
     age = (datetime.now() - latest).days
