@@ -5,6 +5,7 @@ import urllib
 import requests
 import feedparser
 from readability import Document
+from readabilipy import simple_json_from_html_string
 import jinja2
 from datetime import datetime
 from lxml.html import fromstring, tostring
@@ -36,10 +37,11 @@ def process(rss):
         else:
             try:
                 page = get_page_by_url(article['link'])
-                clean_page = extract_body_from_page(page, article)
-            except:
+                clean_page = extract_body_from_page(page, article['link'])
+            except Exception as e:
                 logging.warning("error get page {}".format(article['link']))
-                clean_page = '<html><body><p><a href="{link}">{link}</a></p></body></html>'.format(link=article['link']).encode('utf-8')
+                logging.warning(e)
+                clean_page = '<html>  <head> <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="/ok.min.css" type="text/css"> </head> <body><p><a href="{link}">{link}</a></p></body></html>'.format(link=article['link']).encode('utf-8')
         file_name = '{base_dir}/{rss_name}/{article_title}.html'.format(
             base_dir = YamlReader('general.target_dir'),
             rss_name = rss["name"],
@@ -93,13 +95,24 @@ def get_page_by_url(url):
     logging.info("retrieve content from {}".format(url))
     r = requests.get(url)
     if r.status_code == 200:
-        return r.content
+        return r.text
 
-def extract_body_from_page(page, article):
-    doc = Document(page)
-    doc_summary = ''
-    doc_summary = doc.summary()
-    return inject_style(doc_summary, article["title"])
+def extract_body_from_page(page, url):
+    title = ''
+    summary = ''
+    if YamlReader('general.use_mozilla_parser'):
+        logging.info("use mozilla readbility parser")
+        article = simple_json_from_html_string(page, use_readability=True)
+        title = article['title']
+        summary = article['content']
+    else:
+        doc = Document(page)
+        title = doc.short_title()
+        summary = doc.summary()
+    return inject_style("<h2>{title}</h2><br/>{summary} <br/><p><a href={link}>{link}</a></p>".format(
+                  title=title,
+                  summary=summary,
+                  link=url), title)
 
 def inject_style(doc, title):
     page = fromstring(doc)
