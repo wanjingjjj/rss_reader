@@ -1,11 +1,20 @@
 general:
     target_dir: /usr/share/nginx/html/rss
-    use_mozilla_parser: true
+    use_mozilla_parser: false
     limit: 20
 rss:
-    - name: Hacker News
-      url: https://news.ycombinator.com/rss
-      full_content: false
+    - name: Solidot
+      url: http://feeds.feedburner.com/solidot
+      full_content: true
+    - name: v2ex
+      url: https://www.v2ex.com/index.xml
+      full_content: true
+    - name: 水木十大
+      url: https://www.mysmth.net/nForum/rss/topten
+      full_content: true
+    - name: 阮一峰
+      url: https://www.ruanyifeng.com/blog/atom.xml
+      full_content: true
     - name: Scientific American
       url: http://rss.sciam.com/ScientificAmerican-Global
       full_content: false
@@ -15,27 +24,12 @@ rss:
     - name: Wired
       url: https://www.wired.com/feed/rss
       full_content: false
-    - name: Solidot
-      url: http://feeds.feedburner.com/solidot
-      full_content: false
     - name: Anandtech
       url: http://www.anandtech.com/rss/
-      full_content: true
-    - name: 阮一峰
-      url: https://www.ruanyifeng.com/blog/atom.xml
       full_content: true
     - name: Rachel By The Bay
       url: https://rachelbythebay.com/w/atom.xml
       full_content: true
     - name: Dan Luu
       url: https://danluu.com/atom.xml
-      full_content: true
-    - name: Techmeme
-      url: https://www.techmeme.com/feed.xml
-      full_content: true
-    - name: 知乎日报
-      url: http://feeds.feedburner.com/zhihu-daily
-      full_content: true
-    - name: 知乎精选
-      url: https://www.zhihu.com/rss
       full_content: true

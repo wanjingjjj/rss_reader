@@ -22,6 +22,9 @@ logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
 templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
 
+def addHeaderFooter(title, body, link):
+    return '<h2>{}</h2><br/>{} <br/><p><a href={}>{}</a></p>'.format(title, body, link, link)
+
 def process(rss):
     logging.info("start processing {} by url: {}".format(rss["name"], rss["url"]))
     limit = YamlReader('general.limit')
@@ -33,7 +36,7 @@ def process(rss):
             latest = article["published_parsed"]
         clean_page = ""
         if rss["full_content"]:
-            clean_page = inject_style(article["content"], article["title"])
+            clean_page = inject_style(article['title'], article["content"], article['link'])
         else:
             try:
                 page = get_page_by_url(article['link'])
@@ -41,7 +44,7 @@ def process(rss):
             except Exception as e:
                 logging.warning("error get page {}".format(article['link']))
                 logging.warning(e)
-                clean_page = '<html>  <head> <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1"> <link rel="stylesheet" href="/ok.min.css" type="text/css"> </head> <body><p><a href="{link}">{link}</a></p></body></html>'.format(link=article['link']).encode('utf-8')
+                clean_page = inject_style(article['link'], '', article['link']).encode('utf-8')
         file_name = '{base_dir}/{rss_name}/{article_title}.html'.format(
             base_dir = YamlReader('general.target_dir'),
             rss_name = rss["name"],
@@ -78,16 +81,21 @@ def render_rss(rss, article_list):
 def get_article_list_by_rss(url):
     feed = feedparser.parse(url)
     article_list = []
-    for i in feed['entries']:
-        published_parsed = i['published_parsed'] if 'published_parsed' in i else i['updated_parsed']
+    for i in feed.entries:
+        published_parsed = i.published_parsed if 'published_parsed' in i else i.updated_parsed
         published_parsed = datetime(*published_parsed[:6])
-        article = {'title': i['title'],
-                   'filename': i['title'][:64],
-                   'filename_escaped': urllib.parse.quote(i['title'][:64]),
-                   'content': i['content'][0]['value'] if 'content' in i else i['description'],
+        content = ''
+        if 'content' in i:
+            content = i.content[0].value
+        elif 'summary' in i:
+            content = i.summary
+        article = {'title': i.title,
+                   'filename': i.title[:64],
+                   'filename_escaped': urllib.parse.quote(i.title[:64]),
+                   'content': content,
                    'published': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
                    'published_parsed': published_parsed,
-                   'link': i['link']}
+                   'link': i.link}
         article_list.append(article)
     return article_list
 
@@ -109,12 +117,10 @@ def extract_body_from_page(page, url):
         doc = Document(page)
         title = doc.short_title()
         summary = doc.summary()
-    return inject_style("<h2>{title}</h2><br/>{summary} <br/><p><a href={link}>{link}</a></p>".format(
-                  title=title,
-                  summary=summary,
-                  link=url), title)
+    return inject_style(summary, title, url)
 
-def inject_style(doc, title):
+def inject_style(title, doc, url):
+    doc = addHeaderFooter(title, doc, url)
     page = fromstring(doc)
     page.insert(0, E.HEAD(
         E.META(charset="UTF-8", name="viewport", content="width=device-width, initial-scale=1"),
