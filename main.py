@@ -90,8 +90,8 @@ def get_article_list_by_rss(url):
         elif 'summary' in i:
             content = i.summary
         article = {'title': i.title,
-                   'filename': i.title[:64],
-                   'filename_escaped': urllib.parse.quote(i.title[:64]),
+                   'filename': i.title[:32].replace('/', ''),
+                   'filename_escaped': urllib.parse.quote(i.title[:32].replace('/', '')),
                    'content': content,
                    'published': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
                    'published_parsed': published_parsed,
@@ -117,7 +117,7 @@ def extract_body_from_page(page, url):
         doc = Document(page)
         title = doc.short_title()
         summary = doc.summary()
-    return inject_style(summary, title, url)
+    return inject_style(title, summary, url)
 
 def inject_style(title, doc, url):
     doc = addHeaderFooter(title, doc, url)
