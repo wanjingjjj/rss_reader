@@ -61,8 +61,9 @@ def process(rss):
     return
 
 def render_index(rss_list):
+    rss_list_sorted = sorted(rss_list, key=lambda rss: rss["age"])
     template = templateEnv.get_template("index.tplt")
-    body = template.render(rss_list = rss_list, updated=datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S'))
+    body = template.render(rss_list = rss_list_sorted, updated=datetime.now(tz=pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S'))
     write_body_to_file(body,
                        '{base_dir}/index.html'.format(base_dir=YamlReader('general.target_dir')),
                        'w')
