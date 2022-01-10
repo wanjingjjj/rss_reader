@@ -44,7 +44,7 @@ def process(rss):
             except Exception as e:
                 logging.warning("error get page {}".format(article['link']))
                 logging.warning(e)
-                clean_page = inject_style(article['link'], '', article['link']).encode('utf-8')
+                clean_page = inject_style(article['link'], '', article['link'])
         file_name = '{base_dir}/{rss_name}/{article_title}.html'.format(
             base_dir = YamlReader('general.target_dir'),
             rss_name = rss["name"],
