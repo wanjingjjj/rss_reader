@@ -128,7 +128,7 @@ def inject_style(title, doc, url):
     page = fromstring(doc)
     page.insert(0, E.HEAD(
         E.META(charset="UTF-8", name="viewport", content="width=device-width, initial-scale=1"),
-        E.LINK(rel="stylesheet", href="/ok.min.css", type="text/css"),
+        E.LINK(rel="stylesheet", href="/base.css", type="text/css"),
         E.TITLE(title)
     ))
     return tostring(page)
