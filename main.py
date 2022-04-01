@@ -14,7 +14,7 @@ import pytz
 
 from config import YamlReader
 
-logging.basicConfig(format='%(asctime)s [%(levelname)s] %(message)s',
+logging.basicConfig(format='%(asctime)s [%(levelname)s] {%(pathname)s:%(lineno)d} %(message)s',
                     level=logging.INFO,
                     stream=sys.stdout)
 
