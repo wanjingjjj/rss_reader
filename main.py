@@ -23,6 +23,8 @@ templateLoader = jinja2.FileSystemLoader(searchpath="./")
 templateEnv = jinja2.Environment(loader=templateLoader)
 
 def addHeaderFooter(title, body, link):
+    #hotfix for smth
+    link = link.replace("www.newsmth.net/nForum", "m.mysmth.net")
     return '<h2>{}</h2><br/>{} <br/><p><a href={}>{}</a></p>'.format(title, body, link, link)
 
 def process(rss):
