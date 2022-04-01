@@ -104,7 +104,8 @@ def get_article_list_by_rss(url):
 
 def get_page_by_url(url):
     logging.info("retrieve content from {}".format(url))
-    r = requests.get(url)
+    user_agent = {'User-agent': 'Mozilla/5.0'}
+    r = requests.get(url, headers = user_agent)
     if r.status_code == 200:
         return r.text
 
