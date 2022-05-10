@@ -15,6 +15,9 @@ rss:
     - name: 阮一峰
       url: https://www.ruanyifeng.com/blog/atom.xml
       full_content: true
+    - name: Aeon
+      url: https://aeon.co/feed.rss
+      full_content: false
     - name: Scientific American
       url: http://rss.sciam.com/ScientificAmerican-Global
       full_content: false

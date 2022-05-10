@@ -90,11 +90,18 @@ def get_article_list_by_rss(url):
         content = ''
         if 'content' in i:
             content = i.content[0].value
+
         img = None
         if 'media_thumbnail' in i:
             img = i.media_thumbnail[0]["url"]
         elif 'media_content' in i:
             img = i.media_content[0]["url"]
+
+        summary = None
+        if 'summary' in i:
+            summary = fromstring(i.summary)
+            remove_junk(summary)
+            summary = tostring(summary)
         article = {'title': i.title,
                    'filename': i.title[:32].replace('/', ''),
                    'filename_escaped': urllib.parse.quote(i.title[:32].replace('/', '')),
@@ -104,7 +111,6 @@ def get_article_list_by_rss(url):
                    'published': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
                    'published_parsed': published_parsed,
                    'link': i.link}
-        print(article)
         article_list.append(article)
     return article_list
 
@@ -129,11 +135,14 @@ def extract_body_from_page(page, url):
         summary = doc.summary()
     return inject_style(title, summary, url)
 
+def remove_junk(page):
+    for junk in page.xpath("//div[@class='feedflare']"):
+        junk.getparent().remove(junk)
+
 def inject_style(title, doc, url):
     doc = addHeaderFooter(title, doc, url)
     page = fromstring(doc)
-    for junk in page.xpath("//div[@class='feedflare']"):
-        junk.getparent().remove(junk)
+    remove_junk(page)
     page.insert(0, E.HEAD(
         E.META(charset="UTF-8", name="viewport", content="width=device-width, initial-scale=1"),
         E.LINK(rel="stylesheet", href="/base.css", type="text/css"),
