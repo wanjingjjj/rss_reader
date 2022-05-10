@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html id=rss_name>
+  <title>{{ rss_name }}</title>
+  <head>
+    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="/base.css" type="text/css">
+  </head>
+  <body>
+    <ul id="article_list">
+      {% for item in article_list %}
+      <li style="text-align:left;">
+         {% if item.summary is not none %}
+           <p>{{ item.summary }}</p>
+         {% endif %}
+         {% if item.image is not none %}
+           <img src="{{ item.image }}">
+         {% endif %}
+         <a href="{{ item.filename_escaped }}.html">{{ item.title }} </a> 
+         <span style="float:right;color:grey;font-size:50%;">{{ item.published }}</span>
+      </li>
+      {% endfor %}
+    </ul>
+  </body>
+</html>

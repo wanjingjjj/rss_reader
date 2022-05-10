@@ -72,7 +72,7 @@ def render_index(rss_list):
     return
 
 def render_rss(rss, article_list):
-    template = templateEnv.get_template("rss.tplt")
+    template = templateEnv.get_template("rss_card.tplt")
     body = template.render(rss_name = rss["name"], article_list = article_list)
     write_body_to_file(body,
                        '{base_dir}/{rss_name}/index.html'.format(
@@ -90,15 +90,21 @@ def get_article_list_by_rss(url):
         content = ''
         if 'content' in i:
             content = i.content[0].value
-        elif 'summary' in i:
-            content = i.summary
+        img = None
+        if 'media_thumbnail' in i:
+            img = i.media_thumbnail[0]["url"]
+        elif 'media_content' in i:
+            img = i.media_content[0]["url"]
         article = {'title': i.title,
                    'filename': i.title[:32].replace('/', ''),
                    'filename_escaped': urllib.parse.quote(i.title[:32].replace('/', '')),
                    'content': content,
+                   'summary': i.summary,
+                   'image': img,
                    'published': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
                    'published_parsed': published_parsed,
                    'link': i.link}
+        print(article)
         article_list.append(article)
     return article_list
 
@@ -126,6 +132,8 @@ def extract_body_from_page(page, url):
 def inject_style(title, doc, url):
     doc = addHeaderFooter(title, doc, url)
     page = fromstring(doc)
+    for junk in page.xpath("//div[@class='feedflare']"):
+        junk.getparent().remove(junk)
     page.insert(0, E.HEAD(
         E.META(charset="UTF-8", name="viewport", content="width=device-width, initial-scale=1"),
         E.LINK(rel="stylesheet", href="/base.css", type="text/css"),
