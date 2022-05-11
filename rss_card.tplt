@@ -6,16 +6,16 @@
     <link rel="stylesheet" href="/base.css" type="text/css">
   </head>
   <body>
-    <ul id="article_list">
+    <ul id="article_list" class="ul-card">
       {% for item in article_list %}
-      <li style="text-align:left;">
-         {% if item.summary is not none %}
-           <p>{{ item.summary }}</p>
+      <li style="text-align:left;" class="li-card">
+         <a href="{{ item.filename_escaped }}.html">{{ item.title }} </a> 
+         {% if item.content is not none %}
+           <p>{{ item.content }}</p>
          {% endif %}
          {% if item.image is not none %}
            <img src="{{ item.image }}">
          {% endif %}
-         <a href="{{ item.filename_escaped }}.html">{{ item.title }} </a> 
          <span style="float:right;color:grey;font-size:50%;">{{ item.published }}</span>
       </li>
       {% endfor %}

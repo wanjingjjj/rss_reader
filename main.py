@@ -72,7 +72,11 @@ def render_index(rss_list):
     return
 
 def render_rss(rss, article_list):
-    template = templateEnv.get_template("rss_card.tplt")
+    rss_tplt = "rss_card.tplt"
+    # we will skip the summary if it has full content
+    if rss["full_content"]:
+        rss_tplt = "rss.tplt"
+    template = templateEnv.get_template(rss_tplt)
     body = template.render(rss_name = rss["name"], article_list = article_list)
     write_body_to_file(body,
                        '{base_dir}/{rss_name}/index.html'.format(
@@ -87,9 +91,13 @@ def get_article_list_by_rss(url):
     for i in feed.entries:
         published_parsed = i.published_parsed if 'published_parsed' in i else i.updated_parsed
         published_parsed = datetime(*published_parsed[:6])
-        content = ''
+        content = None
         if 'content' in i:
             content = i.content[0].value
+        elif 'summary' in i and i.summary != '' and i.summary is not None:
+            summary = fromstring(i.summary)
+            remove_junk(summary)
+            content = tostring(summary).decode('utf-8')
 
         img = None
         if 'media_thumbnail' in i:
@@ -97,16 +105,10 @@ def get_article_list_by_rss(url):
         elif 'media_content' in i:
             img = i.media_content[0]["url"]
 
-        summary = None
-        if 'summary' in i:
-            summary = fromstring(i.summary)
-            remove_junk(summary)
-            summary = tostring(summary)
         article = {'title': i.title,
                    'filename': i.title[:32].replace('/', ''),
                    'filename_escaped': urllib.parse.quote(i.title[:32].replace('/', '')),
                    'content': content,
-                   'summary': i.summary,
                    'image': img,
                    'published': published_parsed.strftime('%Y-%m-%d %H:%M:%S'),
                    'published_parsed': published_parsed,
