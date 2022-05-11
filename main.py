@@ -95,9 +95,11 @@ def get_article_list_by_rss(url):
         if 'content' in i:
             content = i.content[0].value
         elif 'summary' in i and i.summary != '' and i.summary is not None:
-            summary = fromstring(i.summary)
-            remove_junk(summary)
-            content = tostring(summary).decode('utf-8')
+            content = i.summary
+        if content != '' and content is not None:
+            content_html = fromstring(content)
+            remove_junk(content_html)
+            content = tostring(content_html).decode('utf-8')
 
         img = None
         if 'media_thumbnail' in i:
